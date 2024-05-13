@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Aya Grande Resort</title>
+</head>
+<body>
+
+    
+    <header>
+        <a href="index.html" class="logo">Aya Grande <span>.</span> </a>
+        <div class="menuToggle" onclick="toggleMenu()"></div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#about" onclick="toggleMenu()">About</a></li>
+            <li><a href="#offers" onclick="toggleMenu()">Offers</a></li>
+            <li><a href="#rooms" onclick="toggleMenu()">Rooms</a></li>
+            <li><a href="#cottage" onclick="toggleMenu()">Cottage</a></li>
+            <li><a href="#gallarey" onclick="toggleMenu()">Gallery</a></li>
+            <li><a href="#contact" onclick="toggleMenu()">Contact</a></li>
+        </ul>
+    </header>
+
+ 
+    <section class="banner" id="banner">
+        <div class="content">
+            <h2 style="font-size: 7rem;">Aya Grande Resort</h2>
+            <h2 style="font-size: 4rem;">Taste of Nature</h2>
+            <li><a href="#booknow" class="book-now-btn">BOOK NOW</a></li>
+        </div>
+    </section>
+
+
+    <section class="about" id="about">
+        <div class="row">
+            <div class="col50">
+                <h2 class="titletext"><span>A</span>bout Us</h2>
+                <p>Welcome to Aya Grande Resort, where the tranquility of nature meets the luxury of comfort. Nestled amidst lush greenery and serene landscapes, Aya Grande Resort offers an unparalleled retreat for those seeking solace and rejuvenation. </p>
+ 
+                <h1 class="titletext">Vision</h1>
+   
+                    <p>At Aya Grande Resort, our vision is to provide an unforgettable experience that seamlessly blends with the natural beauty that surrounds us. We strive to create moments of pure relaxation and enjoyment for every guest, leaving them with cherished memories that last a lifetime.</p>
+              
+                    <h1 class="titletext">Mission</h1>
+                    
+                    <p> Our mission is to uphold the highest standards of hospitality, ensuring that each guest feels valued, cared for, and truly at home. We are committed to preserving the environment and promoting sustainable practices to safeguard the beauty of our surroundings for generations to come.</p>
+              <br><br>
+                
+            </div>
+            <div class="col50">
+                <div class="imgbox">
+                    <img src="aboutus.jpg" alt="">
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="contact" id="contact">
+        <div class="title white">
+            <h2 class="titletext"><span>C</span>ontact Us </h2>
+            <p>We're always here to assist. Reach out anytime.</p>
+        </div>
+        <div class="contactform">
+            <h3>Send Message</h3>
+            <div class="inputbox">
+                <input type="text" placeholder="Name">
+            </div>
+            <div class="inputbox">
+                <input type="email" placeholder="Email">
+            </div>
+            <div class="inputbox">
+                <textarea rows="8" placeholder="Enter Your Message" cols="30"></textarea>
+            </div>
+            <div class="inputbox">
+                <input type="submit" value="Send">
+            </div>
+        </div>
+    </section>
+
+    <div class="copyrighttext">
+        <p>Copyright &copy;INF222 | All Rights Reserved</p>
+    </div>
+
+    <script type="text/javascript">
+        window.addEventListener('scroll', function () {
+            const header = document.querySelector('header');
+            header.classList.toggle("sticky", window.scrollY > 80)
+        })
+
+        function toggleMenu() {
+            const navlinks = document.querySelector('.nav-links')
+            const menuToggle = document.querySelector('.menuToggle');
+            menuToggle.classList.toggle('active');
+            navlinks.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
