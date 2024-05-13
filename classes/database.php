@@ -1,5 +1,4 @@
 <?php
- 
 class database{
  
     function opencon(){
@@ -10,6 +9,55 @@ class database{
         $query = "Select * from users WHERE username='".$username."'&&passwords='".$passwords."'";
         return $con->query($query)->fetch();
     }
+
+
+    
+  function view()
+  {
+    $con = $this ->opencon();
+    return $con->query("SELECT
+    users.UserID,
+    users.username,
+    users.passwords,
+    users.firstname,
+    users.lastname,
+    users.Birthday,
+    users.Sex,
+    CONCAT(
+        user_address.street,
+        ' ',
+        user_address.barangay,
+        ' ',
+        user_address.city,
+        ' ',
+        user_address.province,
+        ' '
+    ) AS address
+FROM
+    users
+JOIN user_address ON users.UserID = user_address.UserID")-> fetchAll();
+  }
+
+  function delete($id)
+  {
+    try{
+        $con = $this->opencon();
+        $con->beginTransaction();
+        
+        $query =$con->prepare("DELETE FROM user_address WHERE userID = ?");
+        $query->execute([$id]);
+
+        $query2 =$con->prepare("DELETE FROM user_address WHERE userID = ?");
+        $query2->execute([$id]);
+
+        $con->commit();
+        return true;
+    } catch(PDOException $e) {  
+  }
+  }
+
+
+
     function signup($username, $passwords, $firstname, $lastname, $Birthday, $sex){
         $con = $this->opencon();
    
@@ -43,4 +91,4 @@ class database{
     }
    
  
-}
+  }
