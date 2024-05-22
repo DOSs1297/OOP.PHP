@@ -1,8 +1,9 @@
 <?php
  session_start();
  if (empty($_SESSION['username'])) {
-     header('location:login.php');
-}
+    header('location:login.php');
+ }
+
 require_once('classes/database.php');
 $con = new database();
 $error = "";
@@ -11,6 +12,7 @@ if (isset($_POST['multisave'])) {
     // Getting the account information
     $username = $_POST['username'];
     $email = $_POST['email'];
+    
     $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
     
     // Getting the personal information

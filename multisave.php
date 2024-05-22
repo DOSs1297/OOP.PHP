@@ -6,24 +6,26 @@ require_once('classes/database.php');
 
 $con = new database();
 if (isset($_POST['multisave'])) {
-  $firstName = $_POST['firstName'];
-  $lastName = $_POST['lastName'];
-  $Birthday = $_POST['Birthday']; 
-  $username = $_POST['username']; 
-  $passwords = $_POST['passwords']; 
-  $c_pass = $_POST['c_pass']; 
-  $street = $_POST['street'];
-  $Sex = $_POST['Sex'];
-  $barangay = $_POST['barangay'];
-  $city = $_POST['city'];
-  $province = $_POST['province'];
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $confirm = $_POST['c_pass'];
+    $firstname = $_POST['firstname'];
+    $lastname = $_POST['lastname'];
+    $birthday = $_POST['birthday'];
+    $sex = $_POST['sex'];
+    $street = $_POST['street'];
+    $barangay = $_POST['barangay'];
+    $city = $_POST['city'];
+    $province = $_POST['province'];
     
-    if ($passwords == $c_pass) {
+
+
+    if ($password == $confirm) {
         // Passwords match, proceed with signup
-        $user_id= $con->signupUser($username, $passwords, $firstName, $lastName, $Birthday,$Sex); // Insert into users table and get user_id
+        $user_id = $con->signupUser($username, $password, $firstname, $lastname, $birthday, $sex); // Insert into users table and get user_id
         if ($user_id) {
             // Signup successful, insert address into users_address table
-            if ($con->insertAddress($user_id, $city, $province, $barangay , $street)) {
+            if ($con->insertAddress($user_id, $street, $barangay, $city, $province)) {
                 // Address insertion successful, redirect to login page
                 header('location:login.php');
                 exit();
@@ -40,8 +42,10 @@ if (isset($_POST['multisave'])) {
         $error = "Passwords did not match. Please try again.";
     }
 }
-
 ?>
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -56,19 +60,18 @@ if (isset($_POST['multisave'])) {
 
   <style>
     .custom-container{
-       
+        width: 800px;
     }
     body{
     font-family: 'Roboto', sans-serif;
     }
-
   </style>
 
 </head>
 <body>
 
 <div class="container custom-container rounded-3 shadow my-5 p-3 px-5">
-  <h3 class="text-center mt-4"> Registration Form</h3>
+  <h3 class="text-center mt-4"> Update Form</h3>
   <form method="post">
     <!-- Personal Information -->
     <div class="card mt-4">
@@ -77,21 +80,21 @@ if (isset($_POST['multisave'])) {
         <div class="form-row">
           <div class="form-group col-md-6 col-sm-12">
             <label for="firstName">First Name:</label>
-            <input type="text" class="form-control" name="firstName" placeholder="Enter first name">
+            <input type="text" class="form-control" id="firstName" name="firstname" placeholder="Enter first name">
           </div>
           <div class="form-group col-md-6 col-sm-12">
             <label for="lastName">Last Name:</label>
-            <input type="text" class="form-control" name="lastName" placeholder="Enter last name">
+            <input type="text" class="form-control" id="lastName" name="lastname" placeholder="Enter last name">
           </div>
         </div>
         <div class="form-row">
           <div class="form-group col-md-6">
             <label for="birthday">Birthday:</label>
-            <input type="date" class="form-control" name="Birthday">
+            <input type="date" class="form-control" id="birthday" name="birthday">
           </div>
           <div class="form-group col-md-6">
-            <label for="Sex">Sex:</label>
-            <select class="form-control" name="Sex">
+            <label for="sex">Sex:</label>
+            <select class="form-control" id="sex" name="sex">
               <option selected>Select Sex</option>
               <option>Male</option>
               <option>Female</option>
@@ -100,20 +103,18 @@ if (isset($_POST['multisave'])) {
         </div>
         <div class="form-group">
           <label for="username">Username:</label>
-          <input type="text" class="form-control" name="username" placeholder="Enter username">
+          <input type="text" class="form-control" id="username" placeholder="Enter username" name="username">
         </div>
         <div class="form-group">
-          <label for="passwords">Password:</label>
-          <input type="passwords" class="form-control" name="passwords" placeholder="Enter password" required>
+          <label for="password">Password:</label>
+          <input type="password" class="form-control" id="password" placeholder="Enter password" name="password">
         </div>
         <div class="form-group">
-          <label for="c_pass">Confirm Password:</label>
-          <input type="passwords" class="form-control" name="c_pass" placeholder="Confirm password" required>
+          <label for="password">Confirm Password:</label>
+          <input type="password" class="form-control" id="password" placeholder="Confirm password" name="c_pass">
         </div>
       </div>
     </div>
-    
-
     
     <!-- Address Information -->
     <div class="card mt-4">
@@ -121,21 +122,21 @@ if (isset($_POST['multisave'])) {
       <div class="card-body">
         <div class="form-group">
           <label for="street">Street:</label>
-          <input type="text" class="form-control" name="street" placeholder="Enter street">
+          <input type="text" class="form-control" id="street" placeholder="Enter street" name="street">
         </div>
         <div class="form-row">
           <div class="form-group col-md-6">
             <label for="barangay">Barangay:</label>
-            <input type="text" class="form-control" name="barangay" placeholder="Enter barangay">
+            <input type="text" class="form-control" id="barangay" placeholder="Enter barangay" name="barangay">
           </div>
           <div class="form-group col-md-6">
             <label for="city">City:</label>
-            <input type="text" class="form-control" name="city" placeholder="Enter city">
+            <input type="text" class="form-control" id="city" placeholder="Enter city" name="city">
           </div>
         </div>
         <div class="form-group">
           <label for="province">Province:</label>
-          <input type="text" class="form-control" name="province" placeholder="Enter province">
+          <input type="text" class="form-control" id="province" placeholder="Enter province" name="province">
         </div>
       </div>
     </div>
@@ -149,7 +150,6 @@ if (isset($_POST['multisave'])) {
         </div>
         <div class="col-lg-3 col-md-4"> 
             <a class="btn btn-outline-danger btn-block mt-4" href="login.php">Go Back</a>
-
         </div>
     </div>
 </div>

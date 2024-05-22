@@ -1,57 +1,57 @@
 <?php
 require_once('classes/database.php');
 $con = new database();
-session_start();
 
-if (empty($id = $_POST['id'])) {
-     header('location:index.php');
-    }else{
-      
-        $id = $_POST['id'];
-        $data = $con->viewdata($id);
-    }
-    
+if (empty($_POST['id'])) {
+    header('location:index.php');
 
-    if(isset($_POST['update'])) {
-        //user information 
-        $firstname = $_POST['firstname'];
-        $lastname = $_POST['lastname'];
-        $birthday = $_POST['birthday'];
-        $sex = $_POST['sex'];
-        $username = $_POST['user'];
-        $password = $_POST['pass'];
-        $confirm = $_POST['c_pass'];
-        
-        //address information
-        $street =$_POST['street'];
-        $barangay = $_POST['barangay'];
-        $city = $_POST['city'];
-        $province = $_POST['province'];
-        $user_id = $_POST['id'];
+}else {
+    $id = $_POST['id'];
+    $data =$con->viewdata($id);
+}
 
-        echo $user_id;
 
-        if($password == $confirm) {
 
-          echo'Im here';
-            if ($con->updateUser($user_id, $firstname, $lastname, $birthday,$sex, $username, $password)) {
-            // Update user address
-            if ($con->updateUserAddress($user_id, $street, $barangay, $city, $province)) {
-                // Both updates successful, redirect to a success page or display a success message
+
+
+if (isset($_POST['update'])) {
+    //User Information
+
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $confirm = $_POST['c_pass'];
+    $firstname = $_POST['firstname'];
+    $lastname = $_POST['lastname'];
+    $birthday = $_POST['birthday'];
+    $sex = $_POST['sex'];
+
+// Address Information
+
+    $street = $_POST['street'];
+    $barangay = $_POST['barangay'];
+    $city = $_POST['city'];
+    $province = $_POST['province'];
+    $User_Id = $_POST['id'];
+
+    if($password==$confirm) {
+        if ($con->updateUser($User_Id, $username,$password,$firstname, $lastname, $birthday, $sex)) {
+        if ($con->updateUserAddress($User_Id,$street, $barangay, $city,$province )) {
                 header('location:index.php');
                 exit();
-                
-            } else {
-            //     // User address update failed
-                $error = "Error occurred while updating user address. Please try again.";
-             }
-        } else {
-            // User update failed
-            $error = "Error occurred while updating user information. Please try again.";
-        }
+    }else{
+        $error ="Error occured while updating user address. Please try again.";
     }
-}
+    }else{
+        $error = "Error occured while updating user information. Please try again.";
+            }
+        }
+    }   
+
 ?>
+
+
+
+
 
 
 <!DOCTYPE html>
@@ -64,14 +64,22 @@ if (empty($id = $_POST['id'])) {
   <!-- Bootstrap CSS -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  <link rel="stylesheet" href="./includes/style.php">
+
+  <style>
+    .custom-container{
+        width: 800px;
+    }
+    body{
+    font-family: 'Roboto', sans-serif;
+    }
+  </style>
 
 </head>
 <body>
-<?php include('includes/navbar.php'); ?>
+
 <div class="container custom-container rounded-3 shadow my-5 p-3 px-5">
-  <h3 class="text-center mt-4"> Hello, <?php echo $data['firstName']?>!</h3>
-  <form method="POST">
+  <h3 class="text-center mt-4"> Update Information</h3>
+  <form method="post">
     <!-- Personal Information -->
     <div class="card mt-4">
       <div class="card-header bg-info text-white">Personal Information</div>
@@ -79,38 +87,38 @@ if (empty($id = $_POST['id'])) {
         <div class="form-row">
           <div class="form-group col-md-6 col-sm-12">
             <label for="firstName">First Name:</label>
-            <input type="text" class="form-control" value="<?php echo $data['firstName'];?>" name="firstname"  placeholder="Enter first name">
+            <input type="text" class="form-control" id="firstName" name="firstname" placeholder="Enter first name" value="<?php echo $data ['firstname'] ?>">
           </div>
           <div class="form-group col-md-6 col-sm-12">
             <label for="lastName">Last Name:</label>
-            <input type="text" class="form-control" name="lastname" value="<?php echo $data['lastName'];?>" placeholder="Enter last name">
+            <input type="text" class="form-control" id="lastName" name="lastname" placeholder="Enter last name" value="<?php echo $data ['lastname'] ?>">
           </div>
         </div>
         <div class="form-row">
           <div class="form-group col-md-6">
             <label for="birthday">Birthday:</label>
-            <input type="date" class="form-control" value="<?php echo $data['Birthday'];?>"name="birthday">
+            <input type="date" class="form-control" id="birthday" name="birthday" value="<?php echo $data ['birthday'] ?>">
           </div>
           <div class="form-group col-md-6">
             <label for="sex">Sex:</label>
-            <select class="form-control" name="sex">
-            <option value="Male" <?php if ($data['Sex'] === 'Male') echo 'selected'; ?>>Male</option>
-            <option value="Female" <?php if ($data['Sex'] === 'Female') echo 'selected'; ?>>Female</option>
-          </select>
+            <select class="form-control" id="sex" name="sex" value="<?php echo $data ['sex'] ?>">
+              <option selected>Select Sex</option>
+              <option>Male</option>
+              <option>Female</option>
+            </select>
           </div>
         </div>
         <div class="form-group">
           <label for="username">Username:</label>
-          <input type="text" class="form-control" name="user" value="<?php echo $data['username'];?>"  placeholder="Enter username">
-          
+          <input type="text" class="form-control" id="username" placeholder="Enter username" name="username" value="<?php echo $data ['username'] ?>">
         </div>
         <div class="form-group">
           <label for="password">Password:</label>
-          <input type="password" class="form-control" value="<?php echo $data['passwords'];?>"  name="pass" placeholder="Enter password">
+          <input type="password" class="form-control" id="password" placeholder="Enter password" name="password" value="<?php echo $data ['password'] ?>">
         </div>
         <div class="form-group">
           <label for="password">Confirm Password:</label>
-          <input type="password" class="form-control" value="<?php echo $data['passwords'];?>"  name="c_pass" placeholder="Confirm password">
+          <input type="password" class="form-control" id="password" placeholder="Confirm password" name="c_pass" value="<?php echo $data ['password'] ?>">
         </div>
       </div>
     </div>
@@ -121,37 +129,37 @@ if (empty($id = $_POST['id'])) {
       <div class="card-body">
         <div class="form-group">
           <label for="street">Street:</label>
-          <input type="text" class="form-control" name="street" value="<?php echo $data['street'];?>"  placeholder="Enter street">
+          <input type="text" class="form-control" id="street" placeholder="Enter street" name="street" value="<?php echo $data ['street'] ?>">
         </div>
         <div class="form-row">
           <div class="form-group col-md-6">
             <label for="barangay">Barangay:</label>
-            <input type="text" class="form-control" name="barangay" value="<?php echo $data['barangay'];?>" placeholder="Enter barangay">
+            <input type="text" class="form-control" id="barangay" placeholder="Enter barangay" name="barangay" value="<?php echo $data ['barangay'] ?>">
           </div>
           <div class="form-group col-md-6">
             <label for="city">City:</label>
-            <input type="text" class="form-control" name="city"  value="<?php echo $data['city'];?> " placeholder="Enter city">
+            <input type="text" class="form-control" id="city" placeholder="Enter city" name="city" value="<?php echo $data ['city'] ?>">
           </div>
         </div>
         <div class="form-group">
           <label for="province">Province:</label>
-          <input type="text" class="form-control" name="province" value="<?php echo $data['province'];?> " placeholder="Enter province">
+          <input type="text" class="form-control" id="province" placeholder="Enter province" name="province" value="<?php echo $data ['province'] ?>">
         </div>
       </div>
     </div>
     
     <!-- Submit Button -->
-
     
     <div class="container">
     <div class="row justify-content-center gx-0">
         <div class="col-lg-3 col-md-4"> 
-        <input type="hidden" name="id" value="<?php echo $data['UserID']; ?>">
-            <input type="submit" name="update" class="btn btn-outline-primary btn-block mt-4" value="Update">
 
+
+           <input type="hidden" name="id" value="<?php echo $data['User_Id']; ?>">
+           <input type="submit" name="update" class="btn btn-outline-primary btn-block mt-4" value="Update">
         </div>
         <div class="col-lg-3 col-md-4"> 
-            <a class="btn btn-outline-danger btn-block mt-4" href="index2.php">Go Back</a>
+            <a class="btn btn-outline-danger btn-block mt-4" href="login.php">Go Back</a>
         </div>
     </div>
 </div>
