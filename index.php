@@ -44,6 +44,8 @@ if (isset($_POST['delete'])){
       <thead>
         <tr>
           <th>#</th>
+
+          <th>Picture </th>
           <th>First Name</th>
           <th>Last Name</th>
           <th>Birthday</th>
@@ -62,15 +64,25 @@ if (isset($_POST['delete'])){
         ?>
        <tr>
        <td> <?php echo $counter++; ?></td>
+
+       <td>
+        <?php if (!empty($rows ['user_profile_picture'])): ?>
+          <img src="<?php echo htmlspecialchars($rows['user_profile_picture']); ?>" alt="Profile Picture" style="width: 50px; height: 50px; border-radius: 50%;">
+        <?php else: ?>
+          <img src="path/to/default/profile/pic.jpg" alt="Default Profile Picture" style="width: 50px; height: 50px; border-radius: 50%;">
+        <?php endif; ?>
+      </td>
+
+
           <td> <?php echo $rows['firstname']; ?></td>
           <td> <?php echo $rows['lastname']; ?></td>
           <<td> <?php echo $rows['Birthday']; ?></td>
           <td> <?php echo $rows['Sex']; ?></td>
           <td> <?php echo $rows['username']; ?></td>
           <td> <?php echo $rows['address']; ?></td>
-          <td>
+          <!-- <td>
         
-        <!-- Delete button -->
+
         <form action="update.php" method="POST" style="display: inline;">
             <input type="hidden" name="id" value="<?php echo $rows['UserID']; ?>">
             <input type="submit" name="delete" class="btn btn-primary btn-sm" value="Update" onclick="return confirm('Are you sure you want to delete this user?')">
@@ -80,10 +92,27 @@ if (isset($_POST['delete'])){
             <input type="submit" name="delete" class="btn btn-danger btn-sm" value="Delete" onclick="return confirm('Are you sure you want to delete this user?')">
         </form>
           </td>
-        </tr>
+        </tr> -->
+        <td>
+          <div class="btn-group" role="group">
+          <form action="update.php" method="post" class="d-inline">
+                                    <input type="hidden" name="id" value="<?php echo $rows['UserID']; ?>">
+                                    <button type="submit" class="btn btn-warning btn-sm">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </form>
+                                <form method="POST" class="d-inline">
+                                    <input type="hidden" name="id" value="<?php echo $rows['UserID']; ?>">
+                                    <button type="submit" name="delete" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?')">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
+        </div>
+        </td>
         <?php
       }
       ?>
+     
      
         
         <!-- Add more rows for additional users -->
@@ -93,6 +122,40 @@ if (isset($_POST['delete'])){
 </div>
 </div>
 
+<div class="container my-5">
+        <h2 class="text-center">User Profiles</h2>
+        <div class="card-container">
+            <?php
+            $data = $con->view();
+            foreach ($data as $rows) {
+            ?>
+            <div class="card">
+                <div class="card-body text-center">
+                    <?php if (!empty($rows['user_profile_picture'])): ?>
+                        <img src="<?php echo htmlspecialchars($rows['user_profile_picture']); ?>" alt="Profile Picture" class="profile-img">
+                    <?php else: ?>
+                        <img src="path/to/default/profile/pic.jpg" alt="Default Profile Picture" class="profile-img">
+                    <?php endif; ?>
+                    <h5 class="card-title"><?php echo htmlspecialchars($rows['firstname']) . ' ' . htmlspecialchars($rows['lastname']); ?></h5>
+                    <p class="card-text"><strong>Birthday:</strong> <?php echo htmlspecialchars($rows['Birthday']); ?></p>
+                    <p class="card-text"><strong>Sex:</strong> <?php echo htmlspecialchars($rows['Sex']); ?></p>
+                    <p class="card-text"><strong>Username:</strong> <?php echo htmlspecialchars($rows['username']); ?></p>
+                    <p class="card-text"><strong>Address:</strong> <?php echo ucwords(htmlspecialchars($rows['address'])); ?></p>
+                    <form action="update.php" method="post" class="d-inline">
+                        <input type="hidden" name="id" value="<?php echo htmlspecialchars($rows['UserID']); ?>">
+                        <button type="submit" class="btn btn-primary btn-sm">Edit</button>
+                    </form>
+                    <form method="POST" class="d-inline">
+                        <input type="hidden" name="id" value="<?php echo htmlspecialchars($rows['UserID']); ?>">
+                        <input type="submit" name="delete" class="btn btn-danger btn-sm" value="Delete" onclick="return confirm('Are you sure you want to delete this user?')">
+                    </form>
+                </div>
+            </div>
+            <?php
+            }
+            ?>
+        </div>
+    </div>
 <!-- Bootstrap JS and dependencies -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
